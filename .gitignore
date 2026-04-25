@@ -1,0 +1,34 @@
+# Secrets
+.env
+*.env.*
+**/secrets*
+roborock_token
+xiaomi_account.json
+
+# Firmware blobs (large, copyrighted)
+firmware/
+backup/
+*.fw
+*.img
+*.bin
+
+# Captured maps (potentially identifying — house floor plan)
+maps/
+*.pgm
+*.yaml
+!docs/*.yaml
+
+# Logs
+*.log
+logs/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+venv/
