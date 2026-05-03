@@ -11,17 +11,43 @@ Target: Valetudo on-device MQTT → local, no cloud dependency, instant response
 
 - [x] Firmware version captured: `3.5.8_002034` (2026-05-03)
 - [x] Firmware ≤ v2034 confirmed — exactly v2034, root eligible, no downgrade needed
+- [ ] **OTA updates disabled in Xiaomi Home app** — BLOCK THIS FIRST or root is permanently lost
+- [ ] Device token extracted (see note below)
 - [ ] Full HA backup taken and verified (NAS WebDAV backup confirmed working)
 - [ ] Roborock app backup taken (map + settings saved to phone)
-- [ ] DustBuilder rooted firmware image created and tested checksum
+- [ ] DustBuilder rooted firmware image created and tested checksum (verify at builder.dontvacuum.me)
 - [ ] Rollback procedure documented and understood
+
+### Device Token
+
+The token is needed to flash. Retrieve it before starting:
+
+```bash
+# Option 1 — python-miio discover (run while vacuum is on the dock/same Wi-Fi)
+pip install python-miio
+python3 -m miio discover
+# Look for 192.168.0.89 — token is the 32-char hex string
+
+# Option 2 — from HA Xiaomi Home integration logs
+# HA → Settings → System → Logs → filter "roborock" → look for token in auth/init lines
+```
+
+Store the token here once found: `TOKEN=<32_char_hex>`
 
 ## Phase 1 — Root & Flash
 
 1. **Backup**: HA → Settings → System → Backups → Create backup. Verify NAS backup received.
 2. **Roborock app backup**: Export map + preferences.
 3. **Create firmware**: DustBuilder → select S5 → add Valetudo → download image.
-4. **Flash**: `miio flash --ip 192.168.0.89 --token <device_token> --firmware <image.pkg>`
+4. **Flash**: Follow the exact command printed on the DustBuilder download page.
+   The typical command is:
+   ```bash
+   # python-miio >= 0.5.12
+   miiocli roborockvacuum --ip 192.168.0.89 --token <32_char_token> update_firmware image.pkg
+   # If the above fails, try:
+   python3 -m miio.rockrobo --ip 192.168.0.89 --token <32_char_token> --firmware image.pkg
+   ```
+   **Do NOT use `miio flash` — that syntax does not exist in python-miio.**
 5. **Verify**: `curl http://192.168.0.89/api/v2/robot/state` → should return JSON state.
 6. **Valetudo web UI**: http://192.168.0.89 → configure map, zones, MQTT broker.
 
