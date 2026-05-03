@@ -9,8 +9,8 @@ Target: Valetudo on-device MQTT → local, no cloud dependency, instant response
 
 ## Prerequisites Checklist
 
-- [ ] Firmware version captured from `vacuum.roborock_de_261412235_s5` attributes
-- [ ] Firmware ≤ v2034 confirmed (or downgrade path documented)
+- [x] Firmware version captured: `3.5.8_002034` (2026-05-03)
+- [x] Firmware ≤ v2034 confirmed — exactly v2034, root eligible, no downgrade needed
 - [ ] Full HA backup taken and verified (NAS WebDAV backup confirmed working)
 - [ ] Roborock app backup taken (map + settings saved to phone)
 - [ ] DustBuilder rooted firmware image created and tested checksum

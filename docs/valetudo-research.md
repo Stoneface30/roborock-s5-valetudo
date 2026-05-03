@@ -7,21 +7,11 @@
 - DHCP reservation: 192.168.0.89 (configured 2026-05-02)
 
 ## Firmware Version
-**Status: NOT YET CAPTURED**
 
-Firmware must be read from entity attributes after vacuum reconnects to Xiaomi cloud.
-Command to run once online:
-
-```bash
-curl -s -H "Authorization: Bearer $HA_TOKEN" \
-  http://192.168.0.166:8123/api/states/vacuum.roborock_de_261412235_s5 \
-  | python -c "import sys,json; d=json.load(sys.stdin); print(d.get('attributes',{}))"
-```
-
-Look for `firmware_version` in attributes. Record below once captured.
-
-**Firmware version:** _TODO_
-**Captured date:** _TODO_
+**Firmware version:** `3.5.8_002034`
+**Captured date:** 2026-05-03
+**Model:** `roborock.vacuum.s5`
+**Source:** HA device registry `sw_version` via Xiaomi Home integration
 
 ## Root Eligibility Assessment
 
@@ -29,12 +19,14 @@ Look for `firmware_version` in attributes. Record below once captured.
 - DustBuilder root method: requires firmware **≤ v2034**
 - Above v2034: root is blocked (Xiaomi patched the exploit)
 
-### Assessment (fill in after firmware capture)
+### Assessment
 | Check | Status |
 |-------|--------|
-| Firmware ≤ v2034? | **Unknown** |
-| Root eligible? | **Unknown** |
-| Downgrade needed? | **Unknown** |
+| Firmware ≤ v2034? | ✅ **YES — exactly v2034 (3.5.8_002034)** |
+| Root eligible? | ✅ **YES — DustBuilder method viable** |
+| Downgrade needed? | ✅ **NO — already at ceiling, no downgrade required** |
+
+> **Note:** v2034 is the last eligible firmware. Do NOT update Conchita via the Xiaomi app before flashing Valetudo — any OTA update will push past v2034 and permanently block root.
 
 ### If firmware > v2034
 - Downgrade path exists but requires careful research
