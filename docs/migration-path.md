@@ -1,6 +1,6 @@
 # Migration Path — Cloud → Local (Valetudo)
 
-**Status: Planning only. Execute after root is confirmed viable.**
+**Status: Firmware building — job j69f74e8396070 queued 2026-05-03. Awaiting download link email.**
 
 ## Overview
 
@@ -11,11 +11,11 @@ Target: Valetudo on-device MQTT → local, no cloud dependency, instant response
 
 - [x] Firmware version captured: `3.5.8_002034` (2026-05-03)
 - [x] Firmware ≤ v2034 confirmed — exactly v2034, root eligible, no downgrade needed
-- [ ] **OTA updates disabled in Xiaomi Home app** — BLOCK THIS FIRST or root is permanently lost
+- [ ] **OTA updates disabled in Xiaomi Home app** — BLOCK THIS FIRST or root is permanently lost (app shows "up to date" 2026-05-03 — no pending update, but still disable auto-update)
 - [x] Device token extracted — `4153794a65734d616339323569583865` (2026-05-03, from HA backup)
 - [x] Full HA backup taken and verified — slug `f5a79289`, "Pre-Valetudo-flash-2026-05-03", 100.2 MB (2026-05-03)
 - [ ] Roborock app backup taken (map + settings saved to phone)
-- [ ] DustBuilder rooted firmware image created and tested checksum (verify at builder.dontvacuum.me)
+- [~] DustBuilder rooted firmware image — **job j69f74e8396070 submitted 2026-05-03** (Valetudo 2026.02.0, v2034, OTA format). Awaiting download link at jeanbenoit.pilon@gmail.com. Once received: download `.pkg`, verify SHA256, store at `F:\ROBOROCK_CLAUDED\firmware\`
 - [ ] Rollback procedure documented and understood
 
 ### Device Token
