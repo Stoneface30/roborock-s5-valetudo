@@ -1,7 +1,6 @@
 # MQTT Contract — Conchita Local Control
 
-**Status: READY TO IMPLEMENT — Valetudo live at http://192.168.0.202 (2026-05-04)**
-**Next action: SSH in, check actual Valetudo MQTT topic names, configure broker, then implement HA side.**
+**Status: Design only — Valetudo flash pending (CP2102 UART adapter ordered). Implement after successful flash.**
 
 Broker: `mqtt://192.168.0.166:1883` (Mosquitto addon on HA OS)
 Auth: `mqtt_user` / see `.env`
