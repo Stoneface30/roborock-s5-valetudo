@@ -1,6 +1,7 @@
 # MQTT Contract — Conchita Local Control
 
-**Status: Design only — not yet implemented. Requires Valetudo root first.**
+**Status: READY TO IMPLEMENT — Valetudo live at http://192.168.0.202 (2026-05-04)**
+**Next action: SSH in, check actual Valetudo MQTT topic names, configure broker, then implement HA side.**
 
 Broker: `mqtt://192.168.0.166:1883` (Mosquitto addon on HA OS)
 Auth: `mqtt_user` / see `.env`
