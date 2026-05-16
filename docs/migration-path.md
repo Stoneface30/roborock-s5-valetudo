@@ -12,10 +12,10 @@ Target: Valetudo on-device MQTT → local, no cloud dependency, instant response
 - [x] Firmware version captured: `3.5.8_002034` (2026-05-03)
 - [x] Firmware ≤ v2034 confirmed — exactly v2034, root eligible, no downgrade needed
 - [ ] **OTA updates disabled in Xiaomi Home app** — BLOCK THIS FIRST or root is permanently lost (app shows "up to date" 2026-05-03 — no pending update, but still disable auto-update)
-- [x] Device token extracted — `4153794a65734d616339323569583865` (2026-05-03, from HA backup)
+- [x] Device token extracted — `<redacted>` (2026-05-03, from HA backup)
 - [x] Full HA backup taken and verified — slug `f5a79289`, "Pre-Valetudo-flash-2026-05-03", 100.2 MB (2026-05-03)
 - [ ] Roborock app backup taken (map + settings saved to phone)
-- [~] DustBuilder rooted firmware image — **job j69f74e8396070 submitted 2026-05-03** (Valetudo 2026.02.0, v2034, OTA format). Awaiting download link at jeanbenoit.pilon@gmail.com. Once received: download `.pkg`, verify SHA256, store at `F:\ROBOROCK_CLAUDED\firmware\`
+- [~] DustBuilder rooted firmware image — **job submitted 2026-05-03** (Valetudo 2026.02.0, v2034, OTA format). Once received: download `.pkg`, verify SHA256, store at `firmware/`
 - [ ] Rollback procedure documented and understood
 
 ### Device Token
@@ -32,9 +32,9 @@ python3 -m miio discover
 # HA → Settings → System → Logs → filter "roborock" → look for token in auth/init lines
 ```
 
-Store the token here once found: `TOKEN=4153794a65734d616339323569583865`
+Store the token here once found: `TOKEN=<your_32_char_token>`
 
-**Token extracted 2026-05-03** from HA backup (`f5a79289`) `.storage/xiaomi_home/miot_devices/6288372713_de.dict`. Confirmed device did=261412235, model=roborock.vacuum.s5, fw=3.5.8_002034.
+**Token extracted 2026-05-03** from HA backup via `.storage/xiaomi_home/miot_devices/*.dict`. Confirmed model=roborock.vacuum.s5, fw=3.5.8_002034.
 
 ## Phase 1 — Root & Flash
 
