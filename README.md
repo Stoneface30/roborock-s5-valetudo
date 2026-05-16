@@ -14,7 +14,7 @@
 | Robot voice in Mandarin/English | GLaDOS Portal voice pack |
 | Firewall-dependent cloud updates | Self-hosted, zero cloud dependency |
 
-![Valetudo running](Media/PXL_20260516_131018772.jpg)
+![Valetudo running with GLaDOS voice](Media/valetudo-result.gif)
 
 ---
 
@@ -44,9 +44,40 @@ Started with the standard approach: build a rooted firmware on [DustBuilder](htt
 
 Opening the robot is straightforward — 4 Phillips screws, lift the top shell. The UART test points are exposed on the mainboard near the Allwinner SoC.
 
-![UART wiring on mainboard](Media/PXL_20260514_215137953.jpg)
+**Step 1 — Disassembly**
 
-![Soldering CP2102 connections](Media/PXL_20260514_215334528.jpg)
+| | |
+|---|---|
+| ![Robot flipped upside down, bottom panel removed](Media/PXL_20260514_214942910.jpg) | ![Top shell lifted off, robot propped on box](Media/PXL_20260514_214945534.jpg) |
+| *Bottom panel off — 4 screws, clean access* | *Top shell removed, robot propped upright* |
+
+| | |
+|---|---|
+| ![LiDAR motor exposed — red rotating assembly](Media/PXL_20260514_215137953.jpg) | ![Mainboard MAIN-B V3 fully exposed](Media/PXL_20260514_215334328.jpg) |
+| *LiDAR assembly — red motor disc under the top shell* | *Mainboard exposed: MAIN-B V3 with Allwinner R16 SoC* |
+
+**Step 2 — Locating and soldering the UART test points**
+
+The test points are labeled directly on the PCB silkscreen — no guessing required.
+
+| | |
+|---|---|
+| ![UART test points TPA8/TPA15/TPA16 macro with wires soldered](Media/PXL_20260514_223546040.jpg) | ![UART test point labels TPA8, TPA15, TPA16 clearly visible](Media/PXL_20260514_223609497.jpg) |
+| *Wires soldered — TPA8 (TX), TPA15 (RX), TPA16 (GND)* | *PCB silkscreen labels: TPA8, TPA15, TPA16 — no probing needed* |
+
+| | |
+|---|---|
+| ![UART wires taped to mainboard for strain relief](Media/PXL_20260514_223615954.jpg) | ![CP2102 USB-UART adapter plugged into PC USB port](Media/PXL_20260514_224635266.jpg) |
+| *Black electrical tape — strain relief on solder joints* | *CP2102 adapter plugged into PC — the bridge between robot and terminal* |
+
+**Step 3 — Full workbench setup**
+
+| | |
+|---|---|
+| ![Mainboard on desk with full wire setup and battery disconnected](Media/PXL_20260514_224639922.jpg) | ![Full workbench: mainboard, battery, UART wires running to monitor](Media/PXL_20260514_230042294.jpg) |
+| *Mainboard out, UART wires running to CP2102* | *Full setup — battery disconnected, 3 UART wires to PC* |
+
+![UART wiring session timelapse](Media/wiring-setup.gif)
 
 ```
 CP2102 TX  →  TPA15 (robot RX)
@@ -54,9 +85,7 @@ CP2102 RX  →  TPA8  (robot TX)
 CP2102 GND →  TPA16 (GND)
 ```
 
-**PuTTY serial session: 115200 baud.** Boot log visible immediately. The Allwinner U-Boot prints a window to intercept boot with `s` — that's the entry point.
-
-![PuTTY serial session showing U-Boot](Media/PXL_20260514_223546040.jpg)
+**PuTTY serial session: 115200 baud.** Boot log visible immediately.
 
 ---
 
@@ -69,13 +98,20 @@ The U-Boot window is ~2 seconds. Built two Python automation scripts:
 
 The key insight: U-Boot's `key_detect` on the Allwinner R16 checks for `s` specifically. Other characters (space, enter, ESC) are silently ignored.
 
+| | |
+|---|---|
+| ![Mainboard being reassembled with UART wires still attached](Media/PXL_20260515_171044831.jpg) | ![U-Boot terminal flooding with sssssss from catch-uboot.py](Media/PXL_20260515_171337802.jpg) |
+| *Reassembling with UART wires still live — catching U-Boot mid-boot* | *`catch-uboot.py` floods `s` — partition table visible, boot intercepted* |
+
 ```bash
 sunxi# setenv bootargs ${setargs_mmc} init=/bin/sh
 sunxi# boot
 # Boots straight to a root shell, bypassing init
 ```
 
-![U-Boot shell active in PuTTY](Media/PXL_20260515_171044831.jpg)
+![UART wire bundle exiting the assembled robot chassis](Media/PXL_20260515_191317211.jpg)
+
+*UART harness exiting the chassis — reassembled enough to boot, open enough to monitor*
 
 ---
 
@@ -131,6 +167,14 @@ The Roborock S5 uses an **A/B partition scheme** on eMMC:
 | /mnt/data | mmcblk0p1 | 1.5GB | Persistent data |
 | U-Boot env | mmcblk0p5 | 16MB | Boot flags (A/B GOOD/BAD) |
 
+![Robot connected via UART to Corsair PC tower, open chassis](Media/PXL_20260516_113659364.jpg)
+
+*Flash day — robot open on desk, UART cable running up to the PC*
+
+![Claude Code + terminal showing SCP sftp-server failure, robot in foreground](Media/PXL_20260516_113807245.jpg)
+
+*"SSH is in. Time to flash." — but SCP immediately fails: `ash: /usr/lib/sftp-server: not found`. Dropbear has no sftp-server.*
+
 **Stage 1 — Flash system\_b while running system\_a:**
 
 ```bash
@@ -141,6 +185,16 @@ sh install_b.sh
 # → system_b GOOD, system_a BAD → reboot → Valetudo boots on system_b
 ```
 
+![install_b.sh starting - disk.img verified OK, Installing...](Media/PXL_20260516_131018772.jpg)
+
+*`install_b.sh` starting — `./disk.img: OK`, writing 510MB to system\_b*
+
+![Flashing terminal timelapse — dd progress](Media/flashing.gif)
+
+![install_b.sh complete: 534MB at 11.4 MB/s, System_B GOOD, System_A BAD](Media/PXL_20260516_131131402.jpg)
+
+*534,773,760 bytes copied in 46.7s at **11.4 MB/s** — System\_B GOOD, System\_A BAD. Reboot.*
+
 **Stage 2 — Flash system\_a while running Valetudo on system\_b:**
 
 ```bash
@@ -149,6 +203,10 @@ sh install_a.sh
 # → disk.img deleted (frees 510MB)
 # → reboot → both partitions identical
 ```
+
+![install_a.sh complete via PuTTY - System_A GOOD, disk.img deleted](Media/PXL_20260516_131732001.MP.jpg)
+
+*PuTTY serial session — `install_a.sh` completes: System\_A GOOD, `disk.img` deleted. Both partitions flashed. Done.*
 
 **U-Boot boot flags** (written directly to mmcblk0p5 at byte offsets):
 ```bash
@@ -259,7 +317,7 @@ docs/
 ├── migration-path.md       # Step-by-step migration checklist (cloud → local)
 └── mqtt-contract.md        # HA MQTT entity YAML and topic map
 
-Media/                  # Photos and videos of the physical operation
+Media/                  # Photos, videos and GIFs of the physical operation
 ```
 
 ---
