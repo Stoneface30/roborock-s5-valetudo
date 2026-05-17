@@ -1,6 +1,21 @@
 # Roborock S5 → Valetudo: Killing the Cloud
 
+![Valetudo Version](https://img.shields.io/badge/Valetudo-2026.02.0-blue) ![Status](https://img.shields.io/badge/Status-Complete-green) ![Python](https://img.shields.io/badge/Python-3.x-blue) ![License](https://img.shields.io/badge/License-MIT-green)
+
 > **Full local control.** UART root, manual eMMC flash, Valetudo 2026.02.0, MQTT to Home Assistant. No cloud. No Xiaomi. GLaDOS voice.
+
+---
+
+## Quick Start
+
+| Aspect | Details |
+|--------|---------|
+| **Device** | Roborock S5 (roborock.vacuum.s5, S502-00) |
+| **Target firmware** | Valetudo 2026.02.0 (both A/B partitions) |
+| **Prerequisites** | CP2102 USB-UART adapter, Python 3.x, SSH client |
+| **Time required** | ~3 hours (soldering + flashing + setup) |
+| **Result** | Full SSH root, REST API, MQTT integration, zero cloud |
+| **Full guide** | See [The Journey](#the-journey) section below + [docs/](docs/) |
 
 ---
 
@@ -15,6 +30,25 @@
 | Firewall-dependent cloud updates | Self-hosted, zero cloud dependency |
 
 ![Valetudo running with GLaDOS voice](Media/valetudo-result.gif)
+
+---
+
+## Tech Stack & Capabilities
+
+**Firmware & Control:**
+- **Valetudo 2026.02.0** — Open-source local vacuum OS (DustBuilder compiled)
+- **SSH Root** — Dropbear with custom legacy crypto flags for modern OpenSSH
+- **REST API** — Full Valetudo v2 API (device control, map streaming)
+- **MQTT Integration** — Home Assistant MQTT discovery (Mosquitto broker)
+
+**Custom Enhancements:**
+- **GLaDOS Voice Pack** — Portal-themed custom robot voice
+- **Dual A/B Partitions** — Both system partitions flashed for redundancy & recovery
+
+**Performance:**
+- **510MB dual A/B flash:** ~3 minutes (optimized 4MB block writes vs. 66 min with naive 512B blocks)
+- **Zero cloud dependency** — All control local, no Xiaomi servers required
+- **Instant MQTT response** — No internet connection needed for operation
 
 ---
 
